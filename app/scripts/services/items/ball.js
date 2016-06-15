@@ -12,7 +12,9 @@ angular.module('BounceGame').factory('Ball', function(RenderingEngine, GameConst
 	 * @param ball: The ball to be rendered by RenderingEngine
 	 */
 	function render(ball) {
-		RenderingEngine.renderCircle(ball.posX, ball.posY, ball.radius, ball.color)
+		if (ball.state !== 'dead') {
+			RenderingEngine.renderCircle(ball.posX, ball.posY, ball.radius, ball.color)	
+		}
 	}
 	
 	/**
@@ -56,7 +58,8 @@ angular.module('BounceGame').factory('Ball', function(RenderingEngine, GameConst
 				radius: radius,
 				dx: deltaX,
 				dy: deltaY,
-				color: color
+				color: color,
+				state: 'alive'
 			}
 			
 			return ball;

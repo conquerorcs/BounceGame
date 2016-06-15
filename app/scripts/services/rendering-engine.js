@@ -36,6 +36,16 @@ angular.module('BounceGame').factory('RenderingEngine', function(GameConstants) 
 			this.context.fill();
 			
 			this.context.closePath();
+		},
+		
+		renderRectangle: function(posX, posY, width, height, color) {
+			this.context.beginPath();
+			
+			this.context.rect(posX, posY, width, height);
+			this.context.fillStyle = color;
+			this.context.fill();
+			
+			this.context.closePath();
 		}
 	}
 });
