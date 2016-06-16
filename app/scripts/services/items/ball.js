@@ -13,7 +13,11 @@ angular.module('BounceGame').factory('Ball', function(RenderingEngine, GameConst
 	 */
 	function render(ball) {
 		if (ball.state !== 'dead') {
-			RenderingEngine.renderCircle(ball.posX, ball.posY, ball.radius, ball.color)	
+			if (ball.posY >= ball.radius) {
+				RenderingEngine.renderCircle(ball.posX, ball.posY - ball.radius / 2, ball.radius, ball.color);	
+			} else {
+				RenderingEngine.renderCircle(ball.posX, ball.radius, ball.radius, ball.color);
+			}
 		}
 	}
 	

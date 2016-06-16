@@ -1,12 +1,6 @@
-angular.module('BounceGame', []).controller('GameController', function($scope, GameConstants, GameEngine) {
-	$scope.boardWidth = GameConstants.WINDOW_WIDTH;
-	$scope.boardHeight = GameConstants.WINDOW_HEIGHT;
-	
-	GameEngine.run();
-	
-}).constant('GameConstants', {
-	WINDOW_WIDTH: 600,
-	WINDOW_HEIGHT: 400,
+angular.module('BounceGame', []).constant('GameConstants', {
+	WINDOW_WIDTH: 800,
+	WINDOW_HEIGHT: 500,
 	UPDATE_RATE_MSEC: 5,
 	
 	PADDLE_WIDTH: 100,
@@ -16,5 +10,8 @@ angular.module('BounceGame', []).controller('GameController', function($scope, G
 	BALL_RADIUS: 20,
 	
 	KEYBOARD_LEFT_CODE: 37,
-	KEYBOARD_RIGHT_CODE: 39
+	KEYBOARD_RIGHT_CODE: 39,
+	
+	BRICK_WIDTH: 80,
+	BRICK_HEIGHT: 20
 });

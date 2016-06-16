@@ -2,10 +2,11 @@
 <head>
 <title>Bounce Game</title>
 </head>
-<body ng-app="BounceGame" ng-controller="GameController">
-	<canvas id="gameCanvas" width="{{boardWidth}}" height="{{boardHeight}}" style="background-color: black"></canvas>
+<body ng-app="BounceGame">
+	<bounce-game></bounce-game>
 	
-	<script type="text/javascript" src="bower_components/angular/angular.js"></script>
+	<!-- Required dependency for external libraries -->
+	<script type="text/javascript" src="dependency/angular.js"></script>
 	
 	<script type="text/javascript" src="scripts/app.js"></script>
 	
@@ -17,5 +18,9 @@
 	<!-- Game Items Dependencies -->
 	<script type="text/javascript" src="scripts/services/items/ball.js"></script>
 	<script type="text/javascript" src="scripts/services/items/paddle.js"></script>
+	<script type="text/javascript" src="scripts/services/items/brick.js"></script>
+	<script type="text/javascript" src="scripts/services/items/wall.js"></script>
+	
+	<script type="text/javascript" src="scripts/directives/game-directive.js"></script>
 </body>
 </html>
