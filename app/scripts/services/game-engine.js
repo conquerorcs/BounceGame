@@ -41,6 +41,7 @@ angular.module('BounceGame').factory('GameEngine', function(GameConstants, Rende
 		update: function() {
 			frameCount++;
 			
+			// Update scene until the ball is moving in secure location. 
 			if (CollisionDetector.isValidCollision(this.redBall, this.paddle)) {
 				RenderingEngine.clearScene();
 				
