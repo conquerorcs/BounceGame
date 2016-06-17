@@ -11,13 +11,15 @@ angular.module('BounceGame').factory('Ball', function(RenderingEngine, GameConst
 	 * 
 	 * @param ball: The ball to be rendered by RenderingEngine
 	 */
-	function render(ball) {
+	function render(ball, frameCount) {
 		if (ball.state !== 'dead') {
-			if (ball.posY >= ball.radius) {
-				RenderingEngine.renderCircle(ball.posX, ball.posY - ball.radius / 2, ball.radius, ball.color);	
-			} else {
-				RenderingEngine.renderCircle(ball.posX, ball.radius, ball.radius, ball.color);
-			}
+//			if (ball.posY >= ball.radius) {
+//				RenderingEngine.renderCircle(ball.posX, ball.posY - ball.radius / 2, ball.radius, ball.color);	
+//			} else {
+//				RenderingEngine.renderCircle(ball.posX, ball.radius, ball.radius, ball.color);
+//			}
+			
+			RenderingEngine.renderSprite(ball.sprite, ball.posX, ball.posY, frameCount);
 		}
 	}
 	
@@ -28,8 +30,7 @@ angular.module('BounceGame').factory('Ball', function(RenderingEngine, GameConst
 	 * returns false.
 	 */
 	function checkHorizontalMove(ball) {
-		return (ball.posX + ball.radius) > GameConstants.WINDOW_WIDTH || 
-			   (ball.posX - ball.radius) < 0
+		return (ball.posX + GameConstants.BALL_RADIUS * 2) > GameConstants.WINDOW_WIDTH || ball.posX < 0
 	}
 	
 	/**
@@ -39,8 +40,7 @@ angular.module('BounceGame').factory('Ball', function(RenderingEngine, GameConst
 	 * returns false.
 	 */
 	function checkVerticalMove(ball) {
-		return (ball.posY + ball.radius) > GameConstants.WINDOW_HEIGHT || 
-			   (ball.posY - ball.radius) < 0
+		return (ball.posY + GameConstants.BALL_RADIUS * 2) > GameConstants.WINDOW_HEIGHT || ball.posY < 0
 	}
 	
 	return {
@@ -55,15 +55,15 @@ angular.module('BounceGame').factory('Ball', function(RenderingEngine, GameConst
 		 * 
 		 * @return A new ball object
 		 */
-		createItem: function(posX, posY, radius, deltaX, deltaY, color) {
+		createItem: function(posX, posY, deltaX, deltaY, color, spriteImage) {
 			var ball = {
 				posX: posX,
 				posY: posY,
-				radius: radius,
 				dx: deltaX,
 				dy: deltaY,
 				color: color,
-				state: 'alive'
+				state: 'alive',
+				sprite: RenderingEngine.loadSprite(spriteImage, GameConstants.BALL_RADIUS * 2, GameConstants.BALL_RADIUS * 2)
 			}
 			
 			return ball;
@@ -88,7 +88,7 @@ angular.module('BounceGame').factory('Ball', function(RenderingEngine, GameConst
 			ball.posY += ball.dy;
 			
 			// Reflect ball update on scene
-			render(ball);
+			render(ball, frameCount);
 		}
 	}
 });

@@ -1,7 +1,7 @@
 /**
  * 
  */
-angular.module('BounceGame').factory('GameEngine', function(GameConstants, RenderingEngine, KeyboardService, Ball, Paddle, Brick, Wall) {
+angular.module('BounceGame').factory('GameEngine', function(GameConstants, RenderingEngine, KeyboardService, CollisionDetector, Ball, Paddle, Brick, Wall) {
 	var frameCount = null;
 	
 	/**
@@ -16,37 +16,21 @@ angular.module('BounceGame').factory('GameEngine', function(GameConstants, Rende
 		// Initialize Keyboard Engine to handle keyboard events
 		KeyboardService.init();
 		
-		// Initialize Game Objects (Ball, Paddle and Brick-Walls)
-		this.redBall = Ball.createItem(GameConstants.WINDOW_WIDTH / 2, GameConstants.WINDOW_HEIGHT - 10, 10, 2, 2, 'red');
-		
-		this.greenBall = Ball.createItem(200, 200, 10, 2, 2, '#00FF00');
+		// Initialize Game Items in Bounce Game
+		initGameItems();
+	}
+	
+	/**
+	 * Creates and assigns the initial values to game objects.
+	 */
+	function initGameItems() {
+		this.redBall = Ball.createItem(GameConstants.WINDOW_WIDTH / 2, 
+									  GameConstants.WINDOW_HEIGHT - 50, 
+									  2, 2, 'red', 'images/red.png');
 		
 		this.paddle = Paddle.createItem(GameConstants.WINDOW_WIDTH / 2, 
-									  (GameConstants.WINDOW_HEIGHT - GameConstants.PADDLE_HEIGHT),
-									  GameConstants.PADDLE_WIDTH, GameConstants.PADDLE_HEIGHT, 3, 3, GameConstants.PADDLE_COLOR);
-		
-		this.wall = Wall.init(50, 50, 5, 6);
-	}
-	
-	function control(ball, paddle) {
-		if (ball.posY > paddle.posY) {
-			if (ball.posX < paddle.posX || ball.posX > (paddle.posX + paddle.w)) {
-				ball.state = 'dead';
-			}
-		}
-	}
-	
-	function checkCollision(bricks, ball) {
-		for (var idx = 0; idx < bricks.length; idx++) {
-			if (bricks[idx].state > 0 && ball.state == 'alive') {
-				if (ball.posX > bricks[idx].posX && ball.posX < bricks[idx].posX + GameConstants.BRICK_WIDTH && 
-						ball.posY > bricks[idx].posY && ball.posY < bricks[idx].posY + GameConstants.BRICK_HEIGHT) {
-						ball.dy = -ball.dy;
-						
-						bricks[idx].state -= 1;
-					}	
-			}
-		}
+				  						(GameConstants.WINDOW_HEIGHT - GameConstants.PADDLE_HEIGHT),
+				  						GameConstants.PADDLE_WIDTH, GameConstants.PADDLE_HEIGHT, 3, 3, GameConstants.PADDLE_COLOR);
 	}
 	
 	return {
@@ -57,23 +41,12 @@ angular.module('BounceGame').factory('GameEngine', function(GameConstants, Rende
 		update: function() {
 			frameCount++;
 			
-			// Update Game Objects
-			
-			RenderingEngine.clearScene();
-			
-			// Make all rendering
-			Ball.update(this.redBall, frameCount);
-			//Ball.update(this.greenBall, frameCount);
-			
-			//console.log(frameCount);
-			
-			Paddle.update(this.paddle,frameCount);
-			
-			control(this.redBall, this.paddle);
-			
-			checkCollision(Wall.getBricks(), this.redBall);
-			
-			Wall.render();
+			if (CollisionDetector.isValidCollision(this.redBall, this.paddle)) {
+				RenderingEngine.clearScene();
+				
+				Ball.update(this.redBall, frameCount);
+				Paddle.update(this.paddle,frameCount);
+			}
 		},
 		
 		run: function() {
